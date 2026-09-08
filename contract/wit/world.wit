@@ -1,0 +1,46 @@
+/// z-dataguard-compliance WIT world — confidential enterprise compliance showcase.
+///
+/// Imports required host capabilities:
+///   - tenant-context: tenant DID (map naming), contract id, cluster timestamp
+///   - logging:        debug / info / error lines
+///   - kv-store:       reads `policies` map, writes `ledger` map + claims digest
+///
+/// Policy thresholds and records flow:
+///   - `policies` map (`z:<tid>:policies`) holds numeric thresholds, seeded by
+///     the tenant SDK before first use (keys: `salary_threshold_usd`,
+///     `capital_outflow_threshold_usd`).
+///   - Records arrive inline in the call input. Raw PII is evaluated inside
+///     the enclave and NEVER persisted — only verdicts, masked summaries, and
+///     attestations are written to the `ledger` map (`z:<tid>:ledger`).
+///   - A SHA-256 claims digest of each ledger entry is pinned into the Merkle
+///     leaf via `kv-store::set-claims-digest` for offline receipt verification.
+///
+/// Note: no `http` import — this contract makes zero outbound calls, so no
+/// user egress grant is needed to invoke it.
+package z:dataguard-compliance@0.1.0;
+
+world dataguard-compliance {
+    import host:tenant/tenant-context@1.0.0;
+    import host:interfaces/logging@2.1.0;
+    import host:interfaces/kv-store@2.1.0;
+
+    export contracts;
+}
+
+interface contracts {
+    /// Standard 3-field envelope used by all contracts callable from the node.
+    /// `input`        — JSON-serialized request payload specific to the function.
+    /// `user-profile` — always None for tenant contracts (hardcoded at dispatch).
+    /// `context`      — JSON-serialized DynamicContext (node-minted, trusted).
+    record generic-input {
+        input:        option<list<u8>>,
+        user-profile: option<list<u8>>,
+        context:      option<list<u8>>,
+    }
+
+    /// Audit one enterprise record inside the enclave.
+    /// Input  (JSON): { entity: "payroll" | "vendor", record: { ... } }
+    /// Output (JSON): { record_id, entity, passed, verdict, violations,
+    ///                  sanitized_summary, attestation }
+    audit-record: func(req: generic-input) -> result<list<u8>, string>;
+}

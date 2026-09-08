@@ -4,10 +4,17 @@
   "description": "Enterprise Confidential Compliance and Audit Attestation Agent built with Terminal 3 (T3N) ADK",
   "main": "dist/index.js",
   "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "start": "tsx src/index.ts",
     "quickstart": "tsx quickstart.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "build:contract": "cargo build --target wasm32-wasip2 --release",
+    "test:contract": "cargo test --lib --target x86_64-unknown-linux-gnu",
+    "build:ts": "tsc"
   },
   "keywords": [
     "t3n",
@@ -18,7 +25,8 @@
     "enterprise",
     "compliance",
     "attestation",
-    "did"
+    "did",
+    "wasm"
   ],
   "author": "",
   "license": "MIT",

@@ -23,7 +23,7 @@ console.log("Derived Ethereum address:", address);
 
 console.log("Using trust anchor...");
 // Note: fetchTrustedManifest("testnet") currently throws malformed manifest error against sg.testnet
-const trustAnchor = { unsafe_trust_server: true };
+const trustAnchor = { unsafe_trust_server: true as const };
 
 const t3n = new T3nClient({
   trustAnchor,
