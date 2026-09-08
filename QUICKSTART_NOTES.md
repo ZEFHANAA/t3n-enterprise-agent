@@ -46,6 +46,6 @@ This repo continues past the Quickstart into the full Walkthrough:
 |---|---|
 | 1. Write contract (Rust) | `contract/src/lib.rs`, `engine.rs`, `policy.rs`, `contract/wit/` |
 | 2. Build contract (WASM) | `npm run build:contract` → 205 KB artifact (target `wasm32-wasip2`) |
-| 3. Register contract | `deployContract()` in `src/tenant.ts` → `dataguard-compliance@0.1.3`, id 966 |
+| 3. Register contract | `deployContract()` in `src/tenant.ts` → `dataguard-compliance@0.1.3`, id 948 (status `active`) |
 | 4. Invoke contract | `npm start` → 5 records audited in-enclave (2 APPROVED, 1 ESCALATE, 2 REJECTED) |
 | 5. Test | `npm run test:contract` → 16/16 Rust unit tests pass; threshold-override + ledger re-read verified live |

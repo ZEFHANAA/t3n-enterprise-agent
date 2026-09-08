@@ -67,5 +67,7 @@ correctly flipped a verdict to `ESCALATE_TO_BOARD`.
    invoke it under their own delegation.
 3. Add a delegated-invocation path for external member DIDs — currently the
    owner invokes its own contract directly.
-4. Real enclave attestation binding in the ledger entry (see README "Security
-   posture" for what is and isn't currently proven).
+4. Real enclave attestation binding in the ledger entry. Today the entry
+   carries an integrity (proof) hash produced inside the enclave, but it is not
+   bound to a hardware attestation quote, so it proves record integrity rather
+   than enclave identity.
